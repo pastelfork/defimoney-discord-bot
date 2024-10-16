@@ -22,6 +22,7 @@ CHANNEL_ID = os.environ['CHANNEL_ID']
 
 ARBITRUM_RPC_URL = os.environ['ARBITRUM_RPC_URL']
 OPTIMISM_RPC_URL = os.environ['OPTIMISM_RPC_URL']
+BASE_RPC_URL = os.environ['BASE_RPC_URL']
 
 MAIN_CONTROLLER = '0x1337F001E280420EcCe9E7B934Fa07D67fdb62CD'
 
@@ -114,7 +115,7 @@ class EventListener:
 
         # Filtering operation: if collateral value or debt amount is greater than filter_threshold, send message to Discord.
         if coll_value > filter_threshold or debt_amount_dec > filter_threshold:
-            await send_message_to_channel(f">>> ### New loan created on {self.chain.upper()}: \n{collateral_name} deposited: __{coll_amount_dec}__ \n$MONEY minted: __{debt_amount_dec}__")
+            await send_message_to_channel(f">>> ### New loan created on {self.chain.upper()} \n{collateral_name} deposited: __{coll_amount_dec}__ \n$MONEY minted: __{debt_amount_dec}__")
 
     async def handle_close_loan_event(self, event):
         # Get market operator address from event
@@ -135,7 +136,7 @@ class EventListener:
         
         # Filtering operation: if any of the values is greater than filter_threshold, send message to Discord.
         if coll_value > filter_threshold or debt_withdrawn_amount_dec > filter_threshold or debt_repaid_amount_dec > filter_threshold:
-            await send_message_to_channel(f">>> ### Loan closed on {self.chain.upper()}: \n{collateral_name} withdrawn: __{coll_withdrawn_amount_dec}__ \n$MONEY withdrawn: __{debt_withdrawn_amount_dec}__ \n$MONEY repaid: __{debt_repaid_amount_dec}__")
+            await send_message_to_channel(f">>> ### Loan closed on {self.chain.upper()} \n{collateral_name} withdrawn: __{coll_withdrawn_amount_dec}__ \n$MONEY withdrawn: __{debt_withdrawn_amount_dec}__ \n$MONEY repaid: __{debt_repaid_amount_dec}__")
 
     async def handle_liquidate_loan_event(self, event):
         # Get market operator address from event
@@ -152,7 +153,7 @@ class EventListener:
         debt_received_amount_dec = round(debt_received / 10 ** 18, 2) # $MONEY has 18 decimals
         debt_repaid_amount_dec = round(debt_repaid / 10 ** 18, 2) # $MONEY has 18 decimals
         
-        await send_message_to_channel(f">>> ### Loan liquidated on {self.chain.upper()}: \n{collateral_name} received: __{coll_received_amount_dec}__ \n$MONEY received: __{debt_received_amount_dec}__ \n$MONEY repaid: __{debt_repaid_amount_dec}__")
+        await send_message_to_channel(f">>> ### Loan liquidated on {self.chain.upper()} \n{collateral_name} received: __{coll_received_amount_dec}__ \n$MONEY received: __{debt_received_amount_dec}__ \n$MONEY repaid: __{debt_repaid_amount_dec}__")
 
     async def handle_adjust_loan_event(self, event):
         # Get market operator address from event
@@ -172,7 +173,7 @@ class EventListener:
         
         # Filtering operation: if the absolute change of collateral OR debt is greater than filter_threshold, send message to Discord.
         if abs(coll_value) > filter_threshold or abs(debt_adjustment_amount_dec) > filter_threshold:
-            await send_message_to_channel(f">>> ### Loan adjustment on {self.chain.upper()}: \n{collateral_name} change: __{coll_adjustment_amount_dec}__ \n$MONEY change: __{debt_adjustment_amount_dec}__")
+            await send_message_to_channel(f">>> ### Loan adjustment on {self.chain.upper()} \n{collateral_name} change: __{coll_adjustment_amount_dec}__ \n$MONEY change: __{debt_adjustment_amount_dec}__")
 
     async def get_coll_value(self, collateral_address: str, coll_amount_dec: float):
         coll_oracle_price: int = await self.main_controller_contract.functions.get_oracle_price(
@@ -200,13 +201,16 @@ async def send_message_to_channel(message):
 async def main():
     optimism_async_w3 = AsyncWeb3(WebSocketProvider(OPTIMISM_RPC_URL))
     arbitrum_async_w3 = AsyncWeb3(WebSocketProvider(ARBITRUM_RPC_URL))
+    base_async_w3 = AsyncWeb3(WebSocketProvider(BASE_RPC_URL))
 
     optimism_listener = EventListener('optimism', optimism_async_w3)
     arbitrum_listener = EventListener('arbitrum', arbitrum_async_w3)
+    base_listener = EventListener('base', base_async_w3)
 
     tasks = [
         optimism_listener.subscribe_to_events(),
-        arbitrum_listener.subscribe_to_events()
+        arbitrum_listener.subscribe_to_events(),
+        base_listener.subscribe_to_events()
     ]
 
     await asyncio.gather(*tasks)

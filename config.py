@@ -66,5 +66,23 @@ market_operators_config = {
             'collateral_decimals': 18, 
             'collateral_address': '0x0c880f6761F1af8d9Aa9C466984b80DAb9a8c9e8'
         }
+    },
+
+    'base': {
+        '0xA929A836148E0635aB5EDf5B474d664601aDD2cE': {
+            'collateral_name': 'WETH', 
+            'collateral_decimals': 18, 
+            'collateral_address': '0x4200000000000000000000000000000000000006'
+        },
+        '0xA86e8d5ed6F07DAb21C44e55e8576742760a7aFB': {
+            'collateral_name': 'CBBTC', 
+            'collateral_decimals': 8, 
+            'collateral_address': '0xcbB7C0000aB88B473b1f5aFd9ef808440eed33Bf'
+        },
+        '0xdf887F7a76744df87CF8111349657688E73257dc': {
+            'collateral_name': 'CBETH', 
+            'collateral_decimals': 18, 
+            'collateral_address': '0x2Ae3F1Ec7F1F5012CFEab0185bfc7aa3cf0DEc22'
+        }
     }
 }
