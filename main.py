@@ -170,10 +170,20 @@ class EventListener:
         debt_adjustment_amount_dec = round(debt_adjustment / 10 ** 18, 2) # $MONEY has 18 decimals
 
         coll_value = await self.get_coll_value(collateral_address, coll_adjustment_amount_dec)
+
+        if coll_adjustment_amount_dec >= 0:
+            coll_adjustment_descriptor: str = 'added'
+        else:
+            coll_adjustment_descriptor: str = 'withdrawn'
+
+        if debt_adjustment_amount_dec >= 0:
+            debt_adjustment_descriptor: str = 'minted'
+        else:
+            debt_adjustment_descriptor: str = 'repaid'
         
         # Filtering operation: if the absolute change of collateral OR debt is greater than filter_threshold, send message to Discord.
         if abs(coll_value) > filter_threshold or abs(debt_adjustment_amount_dec) > filter_threshold:
-            await send_message_to_channel(f">>> ### Loan adjustment on {self.chain.upper()} \n{collateral_name} change: __{coll_adjustment_amount_dec}__ \n$MONEY change: __{debt_adjustment_amount_dec}__")
+            await send_message_to_channel(f">>> ### Loan adjustment on {self.chain.upper()} \n{collateral_name} {coll_adjustment_descriptor}: __{coll_adjustment_amount_dec}__ \n$MONEY {debt_adjustment_descriptor}: __{debt_adjustment_amount_dec}__")
 
     async def get_coll_value(self, collateral_address: str, coll_amount_dec: float):
         coll_oracle_price: int = await self.main_controller_contract.functions.get_oracle_price(
@@ -194,7 +204,7 @@ async def send_message_to_channel(message):
     # We acquire a client with a given token. This allows one REST app instance
     # with one internal connection pool to be reused.
     async with rest.acquire(DISCORD_BOT_TOKEN, "Bot") as client:
-        await client.create_message(CHANNEL_ID, message)
+        await client.create_message(CHANNEL_ID, f'{message}\n')
 
     await rest.close()
     

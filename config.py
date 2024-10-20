@@ -14,7 +14,7 @@ market_operators_config = {
             'collateral_address': '0x68f180fcCe6836688e9084f035309E29Bf0A2095'
         },
         '0xfC6Ec1F94f2fFCe0f0BcB79592D765abD3E1BAEf': {
-            'collateral_name': 'WSTETH', 
+            'collateral_name': 'wstETH', 
             'collateral_decimals': 18, 
             'collateral_address': '0x1F32b1c2345538c0c6f582fCB022739c4A194Ebb'
         },
@@ -47,7 +47,7 @@ market_operators_config = {
             'collateral_address': '0x912CE59144191C1204E64559FE8253a0e49E6548'
         },
         '0xE927e8B43Da90f017b146Eff5f99515372630DD1': {
-            'collateral_name': 'WSTETH', 
+            'collateral_name': 'wstETH', 
             'collateral_decimals': 18, 
             'collateral_address': '0x5979D7b546E38E414F7E9822514be443A4800529'
         },
@@ -75,12 +75,12 @@ market_operators_config = {
             'collateral_address': '0x4200000000000000000000000000000000000006'
         },
         '0xA86e8d5ed6F07DAb21C44e55e8576742760a7aFB': {
-            'collateral_name': 'CBBTC', 
+            'collateral_name': 'cbBTC', 
             'collateral_decimals': 8, 
             'collateral_address': '0xcbB7C0000aB88B473b1f5aFd9ef808440eed33Bf'
         },
         '0xdf887F7a76744df87CF8111349657688E73257dc': {
-            'collateral_name': 'CBETH', 
+            'collateral_name': 'cbETH', 
             'collateral_decimals': 18, 
             'collateral_address': '0x2Ae3F1Ec7F1F5012CFEab0185bfc7aa3cf0DEc22'
         }
